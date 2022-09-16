@@ -12,6 +12,12 @@ export const useStyles = () => {
         headerContainer: {
             flex: 1 / 5,
         },
+        footerContainer: {
+            flex: 0.3,
+            marginVertical: theme.spacing.L,
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+        },
         boardContainer: {
             flex: 1 / 2,
             justifyContent: 'center',
@@ -31,55 +37,8 @@ export const useStyles = () => {
             margin: 15,
             color: theme.color.grey,
         },
+        labelText: { fontFamily: 'Cormorant-Bold', fontSize: 25, color: 'black' },
 
-        paddingContainer: {
-            flex: 1,
-            backgroundColor: theme.color.appBackground,
-            padding: 32,
-        },
-        contentScreen: {
-            flex: 1,
-            margin: theme.spacing.L,
-            padding: theme.spacing.L,
-            borderRadius: 15,
-            backgroundColor: theme.color.primary,
-        },
-        posters: {
-            backgroundColor: theme.color.cardBackground,
-            borderBottomRightRadius: 240,
-            padding: 20,
-        },
-        row: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-        },
-        column: {
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-        },
-
-        labelText: { fontFamily: 'Cormorant-Bold', fontSize: 25, color: 'white' },
-        defaultText: {
-            fontFamily: 'Cormorant-Regular',
-            fontSize: 16,
-            color: theme.color.black,
-        },
-        descriptionText: {
-            textAlign: 'center',
-            fontFamily: 'Cormorant-Bold',
-            fontSize: 16,
-            color: theme.color.black,
-        },
-        input: {
-            height: 40,
-            margin: 12,
-            borderWidth: 1,
-            padding: 10,
-            borderRadius: 30,
-            paddingHorizontal: 20,
-            marginHorizontal: 30,
-            marginBottom: 20,
-        },
         appButtonContainer: {
             elevation: 8,
             borderRadius: 10,
@@ -88,16 +47,10 @@ export const useStyles = () => {
         },
         appButtonText: {
             fontSize: 18,
-            color: '#fff',
+            color: theme.color.appBackground,
             fontWeight: 'bold',
             alignSelf: 'center',
             textTransform: 'uppercase',
-        },
-        registerScreen: {
-            margin: 80,
-            flex: 1,
-            backgroundColor: theme.color.appBackground,
-            alignContent: 'center',
         },
     });
     return styles;
