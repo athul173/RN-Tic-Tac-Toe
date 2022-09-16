@@ -1,15 +1,20 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { useStyles } from "../style/styles";
+import { Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { useStyles } from '../style/styles';
 
-const Cell = () => {
-  const styles = useStyles();
+interface CellProps {
+    cellValue: string;
+    onPress: () => void;
+}
 
-  return (
-    <View style={styles.cellStyle}>
-      <Text style={{ fontSize: 80 }}></Text>
-    </View>
-  );
+const Cell = ({ cellValue, onPress }: CellProps) => {
+    const styles = useStyles();
+
+    return (
+        <TouchableOpacity style={styles.cellStyle} onPress={onPress}>
+            <Text style={{ fontSize: 80 }}>{cellValue}</Text>
+        </TouchableOpacity>
+    );
 };
 
 export default Cell;
