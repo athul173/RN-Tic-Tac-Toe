@@ -6,11 +6,14 @@ import { Cell } from '.';
 const Board = () => {
     const styles = useStyles();
 
-    const [boardValues, setBoardValues] = useState([
+    const emptyBoard = [
         ['', '', ''],
         ['', '', ''],
         ['', '', ''],
-    ]);
+    ];
+
+    const [boardValues, setBoardValues] = useState(emptyBoard);
+    const [counters, setCounters] = useState(0);
 
     const userSymbol = 'O';
     const cpuSymbol = 'X';
@@ -25,7 +28,6 @@ const Board = () => {
             console.log('Got values', aI, bI);
             if (boardValues[aI][bI] === '') {
                 setTimeout(() => {
-                    console.log('2 sec.');
                     console.log('CPU making a move at', aI, bI);
                     boardUpdater(aI, bI, true);
                 }, 2000);
@@ -36,18 +38,30 @@ const Board = () => {
         }
     };
 
+    const resetBoard = () => {
+        setBoardValues(emptyBoard);
+    };
+
     const boardUpdater = (aIndex: number, bIndex: number, cpu?: boolean) => {
         const matrixCopy = [...boardValues];
         matrixCopy[aIndex][bIndex] = cpu ? cpuSymbol : userSymbol;
+        setCounters(counters + 1);
         setBoardValues(matrixCopy);
     };
 
     const onPressHandler = (aIndex: number, bIndex: number, emptyCell: boolean) => {
-        if (emptyCell) {
-            boardUpdater(aIndex, bIndex);
-            cpuMove();
+        console.log('The counters', counters);
+        if (counters < 4) {
+            if (emptyCell) {
+                boardUpdater(aIndex, bIndex);
+                cpuMove();
+            } else {
+                console.log('cell not empty');
+            }
         } else {
-            console.log('cell not empty');
+            console.log('Reached final');
+            setCounters(0);
+            resetBoard();
         }
     };
 
