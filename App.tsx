@@ -9,12 +9,19 @@
  */
 
 import React from "react";
-import { SafeAreaView, StatusBar } from "react-native";
+import { SafeAreaView, StatusBar, useColorScheme } from "react-native";
+import Play from "./src/screens/Play";
+import { useStyles } from "./src/style/styles";
 
 const App = () => {
+  const styles = useStyles();
+
+  const darkMode = useColorScheme();
+
   return (
-    <SafeAreaView>
-      <StatusBar barStyle={"dark-content"} />
+    <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar barStyle={darkMode ? "dark-content" : "light-content"} />
+      <Play />
     </SafeAreaView>
   );
 };
