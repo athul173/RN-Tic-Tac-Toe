@@ -10,6 +10,8 @@ const defaultTheme = {
         grey: palette.grey,
         transparent: palette.transparent,
         black: palette.black,
+        blue: palette.blue,
+        red: palette.red,
     },
     spacing: {
         S: 8,

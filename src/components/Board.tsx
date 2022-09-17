@@ -11,7 +11,7 @@ const Board = () => {
     const styles = useStyles();
 
     const dispatch = useDispatch();
-    const { restart } = useSelector((state: RootState) => state.game);
+    const { restart, userSymbol } = useSelector((state: RootState) => state.game);
 
     const emptyBoard = [
         ['', '', ''],
@@ -31,8 +31,7 @@ const Board = () => {
 
     const [hasWon] = useWinnerCheck();
 
-    const userSymbol = 'O';
-    const cpuSymbol = 'X';
+    const cpuSymbol = userSymbol === 'O' ? 'X' : 'O';
 
     //const [userValues, setUserValues] = useState<number[]>([]);
 

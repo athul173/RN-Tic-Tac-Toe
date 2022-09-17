@@ -16,7 +16,7 @@ const Cell = ({ cellValue, onPress }: CellProps) => {
 
     return (
         <TouchableOpacity style={styles.cellStyle} disabled={pause} onPress={onPress}>
-            <Text style={{ fontSize: 80 }}>{cellValue}</Text>
+            <Text style={cellValue === 'O' ? styles.cellOSymbol : styles.cellXSymbol}>{cellValue}</Text>
         </TouchableOpacity>
     );
 };
