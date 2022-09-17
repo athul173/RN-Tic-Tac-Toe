@@ -15,6 +15,8 @@ const Play = () => {
 
     const { userTurn, pause, result, restart } = useSelector((state: RootState) => state.game);
 
+    const buttonTitle = restart !== null ? 'Play Again' : 'Start game';
+
     const handleButton = () => {
         dispatch(setPause(false));
         dispatch(setResult(''));
@@ -37,7 +39,7 @@ const Play = () => {
                 )}
                 {(pause && userTurn) || result !== '' ? (
                     <CustomButton
-                        title="Start game"
+                        title={buttonTitle}
                         size=""
                         onPress={handleButton}
                         backgroundColor={theme.color.primary}
