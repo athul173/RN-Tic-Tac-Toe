@@ -27,18 +27,21 @@ const Play = () => {
         dispatch(setRestart(true));
     };
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.headerContainer}>
-                <Text style={styles.titleText}>Tic Tac Toe!</Text>
-            </View>
-            <Board />
-            <View style={styles.footerContainer}>
+    const LabelRenderer = () => {
+        return (
+            <>
                 {result === '' ? (
                     <Text style={styles.labelText}>{restart === null ? 'Welcome !' : turnIndicator}</Text>
                 ) : (
                     <Text style={styles.labelText}>{isDrawCheckText}</Text>
                 )}
+            </>
+        );
+    };
+
+    const ButtonRenderer = () => {
+        return (
+            <>
                 {(pause && userTurn) || result !== '' ? (
                     <CustomButton
                         title={buttonTitle}
@@ -49,6 +52,19 @@ const Play = () => {
                 ) : (
                     <></>
                 )}
+            </>
+        );
+    };
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.headerContainer}>
+                <Text style={styles.titleText}>Tic Tac Toe!</Text>
+            </View>
+            <Board />
+            <View style={styles.footerContainer}>
+                <LabelRenderer />
+                <ButtonRenderer />
             </View>
         </View>
     );
