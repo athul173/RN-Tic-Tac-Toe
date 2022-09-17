@@ -17,6 +17,10 @@ const Play = () => {
 
     const buttonTitle = restart !== null ? 'Play Again' : 'Start game';
 
+    const turnIndicator = `It's ${userTurn ? 'your' : `CPU's`} turn`;
+
+    const isDrawCheckText = result !== 'Draw' ? `${result} Won!` : `It's a draw!`;
+
     const handleButton = () => {
         dispatch(setPause(false));
         dispatch(setResult(''));
@@ -31,11 +35,9 @@ const Play = () => {
             <Board />
             <View style={styles.footerContainer}>
                 {result === '' ? (
-                    <Text style={styles.labelText}>
-                        {restart === null ? 'Welcome !' : `It's ${userTurn ? 'your' : `CPU's`} turn`}
-                    </Text>
+                    <Text style={styles.labelText}>{restart === null ? 'Welcome !' : turnIndicator}</Text>
                 ) : (
-                    <Text style={styles.labelText}>{result !== 'Draw' ? `${result} Won!` : `It's a draw!`}</Text>
+                    <Text style={styles.labelText}>{isDrawCheckText}</Text>
                 )}
                 {(pause && userTurn) || result !== '' ? (
                     <CustomButton
