@@ -2,7 +2,7 @@ import { Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useStyles } from '../style/styles';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
+import { RootState } from '../store';
 
 interface CellProps {
     cellValue: string;

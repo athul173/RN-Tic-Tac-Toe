@@ -5,7 +5,7 @@ import { Cell } from '.';
 import useWinnerCheck from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserTurn, setPause, setResult, setRestart } from '../store/game';
-import { RootState } from '../store/store';
+import { RootState } from '../store';
 
 const Board = () => {
     const styles = useStyles();

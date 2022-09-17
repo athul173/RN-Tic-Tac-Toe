@@ -3,6 +3,8 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { AppStackRoutes, StackNavigationProps } from '../../Routes/Navigation';
 import Lottie from 'lottie-react-native';
 import { useStyles } from '../../style/styles';
+import { useDispatch } from 'react-redux';
+import { setWelcome } from '../../store/stack';
 
 interface SplashScreenProps {
     navigation: StackNavigationProps<AppStackRoutes, 'Splash'>;
@@ -14,6 +16,8 @@ const Splash: FC<SplashScreenProps['navigation']> = (SplashScreenProps) => {
     const styles = useStyles();
 
     const animationRef = useRef<Lottie>(null);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         console.log('Running useEffect');
@@ -30,7 +34,7 @@ const Splash: FC<SplashScreenProps['navigation']> = (SplashScreenProps) => {
     }, []);
 
     const animationFinishedHandler = () => {
-        SplashScreenProps.navigation.navigate('Play');
+        dispatch(setWelcome(false));
     };
 
     return (

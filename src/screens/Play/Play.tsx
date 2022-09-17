@@ -4,7 +4,7 @@ import { useStyles } from '../../style/styles';
 import { Board, CustomButton } from '../../components';
 import { useTheme } from '../../style/themes';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
+import { RootState } from '../../store';
 import { setPause, setRestart, setResult } from '../../store/game';
 
 const Play = () => {
