@@ -10,7 +10,9 @@
 
 import React from 'react';
 import { SafeAreaView, StatusBar, useColorScheme } from 'react-native';
+import { Provider } from 'react-redux';
 import Play from './src/screens/Play';
+import { store } from './src/store/store';
 
 const App = () => {
     const darkMode = useColorScheme();
@@ -18,7 +20,9 @@ const App = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar barStyle={darkMode ? 'dark-content' : 'light-content'} />
-            <Play />
+            <Provider store={store}>
+                <Play />
+            </Provider>
         </SafeAreaView>
     );
 };
