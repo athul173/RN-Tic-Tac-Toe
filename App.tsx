@@ -8,11 +8,17 @@
  * @format
  */
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { SafeAreaView, StatusBar, useColorScheme } from 'react-native';
 import { Provider } from 'react-redux';
+import { AppStackRoutes } from './src/Routes/Navigation';
 import Play from './src/screens/Play';
+import Splash from './src/screens/Splash';
 import { store } from './src/store/store';
+
+const Stack = createNativeStackNavigator<AppStackRoutes>();
 
 const App = () => {
     const darkMode = useColorScheme();
@@ -20,9 +26,14 @@ const App = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar barStyle={darkMode ? 'dark-content' : 'light-content'} />
-            <Provider store={store}>
-                <Play />
-            </Provider>
+            <NavigationContainer>
+                <Provider store={store}>
+                    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Splash">
+                        <Stack.Screen name="Splash" component={Splash} />
+                        <Stack.Screen name="Play" component={Play} />
+                    </Stack.Navigator>
+                </Provider>
+            </NavigationContainer>
         </SafeAreaView>
     );
 };

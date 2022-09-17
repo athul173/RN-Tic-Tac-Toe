@@ -52,6 +52,11 @@ export const useStyles = () => {
             alignSelf: 'center',
             textTransform: 'uppercase',
         },
+        paddingContainer: {
+            flex: 1,
+            backgroundColor: theme.color.appBackground,
+            padding: 32,
+        },
     });
     return styles;
 };
