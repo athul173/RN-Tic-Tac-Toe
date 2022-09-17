@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -138,8 +139,8 @@ android {
         applicationId "com.metamaskchallenge"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode generateVersionCode()
+        versionName generateVersionName()
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
@@ -246,6 +247,18 @@ android {
 
         }
     }
+}
+
+private Integer generateVersionCode() {
+  return rootProject.ext.minSdkVersion * 10000000 + project.env.get("MAJOR_VERSION").toInteger() * 10000 + project.env.get("MINOR_VERSION").toInteger() * 100 + project.env.get("PATCH_VERSION").toInteger()
+}
+
+private String generateVersionName() {
+   String versionName = "${project.env.get("MAJOR_VERSION")}.${project.env.get("MINOR_VERSION")}.${project.env.get("PATCH_VERSION")}"
+   if(project.env.get("PRE_RELEASE") != null && !project.env.get("PRE_RELEASE").isEmpty()) {
+       versionName = versionName + "-" + project.env.get("PRE_RELEASE")
+   }
+   return versionName
 }
 
 dependencies {
