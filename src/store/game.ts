@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-type Restart = boolean | null;
-type GameSymbols = 'O' | 'X';
+import { Restart, GameSymbols, Result } from '../constants/Types';
 
 const gameSlice = createSlice({
     name: 'game',
@@ -19,7 +17,7 @@ const gameSlice = createSlice({
         setPause(state, action: PayloadAction<boolean>) {
             state.pause = action.payload;
         },
-        setResult(state, action: PayloadAction<'You' | 'CPU' | 'Draw' | ''>) {
+        setResult(state, action: PayloadAction<Result>) {
             state.result = action.payload;
         },
         setRestart(state, action: PayloadAction<Restart>) {

@@ -98,7 +98,7 @@ export const useStyles = () => {
         },
         roundedBtn: {
             width: 50,
-            marginHorizontal: theme.spacing.L,
+            margin: theme.spacing.L,
             height: 50,
             justifyContent: 'center',
             alignItems: 'center',
