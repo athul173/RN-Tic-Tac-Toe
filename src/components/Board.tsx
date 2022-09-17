@@ -2,6 +2,7 @@ import { View } from 'react-native';
 import React, { useState } from 'react';
 import { useStyles } from '../style/styles';
 import { Cell } from '.';
+import useWinnerCheck from '../hooks';
 
 const Board = () => {
     const styles = useStyles();
@@ -14,6 +15,8 @@ const Board = () => {
 
     const [boardValues, setBoardValues] = useState(emptyBoard);
     const [counters, setCounters] = useState(0);
+
+    const [hasWon] = useWinnerCheck();
 
     const userSymbol = 'O';
     const cpuSymbol = 'X';
@@ -30,7 +33,7 @@ const Board = () => {
                 setTimeout(() => {
                     console.log('CPU making a move at', aI, bI);
                     boardUpdater(aI, bI, true);
-                }, 2000);
+                }, 1000);
             } else {
                 console.log('CPU cannot move at', aI, bI);
                 cpuMove();
@@ -39,6 +42,7 @@ const Board = () => {
     };
 
     const resetBoard = () => {
+        setCounters(0);
         setBoardValues(emptyBoard);
     };
 
@@ -49,7 +53,7 @@ const Board = () => {
         setBoardValues(matrixCopy);
     };
 
-    const onPressHandler = (aIndex: number, bIndex: number, emptyCell: boolean) => {
+    const onPressHandler = async (aIndex: number, bIndex: number, emptyCell: boolean) => {
         console.log('The counters', counters);
         if (counters < 4) {
             if (emptyCell) {
@@ -59,8 +63,7 @@ const Board = () => {
                 console.log('cell not empty');
             }
         } else {
-            console.log('Reached final');
-            setCounters(0);
+            console.log('Reached final and is the user winner? ', hasWon(userSymbol, boardValues));
             resetBoard();
         }
     };

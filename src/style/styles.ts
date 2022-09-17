@@ -33,7 +33,7 @@ export const useStyles = () => {
         titleText: {
             fontFamily: 'Cormorant-Bold',
             textAlign: 'center',
-            fontSize: 35,
+            fontSize: 45,
             margin: 15,
             color: theme.color.grey,
         },
