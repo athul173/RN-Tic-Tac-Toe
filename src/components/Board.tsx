@@ -2,16 +2,17 @@ import { View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useStyles } from '../style/styles';
 import { Cell } from '.';
-import useWinnerCheck from '../hooks';
+import { useWinnerCheck, useDeepCopy } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserTurn, setPause, setResult, setRestart } from '../store/game';
+import { setUserTurn, setPause, setResult, setPlayAgain, setBoard } from '../store/game';
 import { RootState } from '../store';
+import { GameSymbols } from '../constants/Types';
 
 const Board = () => {
     const styles = useStyles();
 
     const dispatch = useDispatch();
-    const { restart, userSymbol } = useSelector((state: RootState) => state.game);
+    const { playAgain, userSymbol, userTurn, board } = useSelector((state: RootState) => state.game);
 
     const emptyBoard = [
         ['', '', ''],
@@ -20,62 +21,92 @@ const Board = () => {
     ];
 
     useEffect(() => {
-        if (restart) {
+        if (playAgain) {
+            console.log('Restart use Effect');
             resetBoard();
-            dispatch(setRestart(false));
         }
-    }, [restart]);
+    }, [playAgain]);
 
-    const [boardValues, setBoardValues] = useState(emptyBoard);
+    useEffect(() => {
+        console.log('User turn changed ', userTurn);
+
+        switch (true) {
+            case counters < 5:
+                if (!userTurn) {
+                    cpuMoveHandler();
+                }
+                break;
+            case counters >= 5 && counters < 9:
+                if (!userTurn && !checkWinner(false)) {
+                    cpuMoveHandler();
+                }
+                break;
+            default:
+                checkWinner(true);
+        }
+    }, [userTurn]);
+
     const [counters, setCounters] = useState(0);
 
     const [hasWon] = useWinnerCheck();
+    const [deepCopy] = useDeepCopy();
 
     const cpuSymbol = userSymbol === 'O' ? 'X' : 'O';
 
     //const [userValues, setUserValues] = useState<number[]>([]);
 
-    const cpuMove = () => {
+    const cpuMoveHandler = () => {
+        console.log('cpu moving and the counter is ', counters);
         const random = true;
         if (random) {
             const aI = Math.floor(Math.random() * 2.9);
             const bI = Math.floor(Math.random() * 2.9);
-            //console.log('Got values', aI, bI);
-            if (boardValues[aI][bI] === '') {
-                dispatch(setUserTurn(false));
-                dispatch(setPause(true));
+            if (board[aI][bI] === '') {
                 setTimeout(() => {
                     //console.log('CPU making a move at', aI, bI);
-                    boardUpdater(aI, bI, true);
+                    boardUpdater(aI, bI, cpuSymbol);
                     dispatch(setUserTurn(true));
                     dispatch(setPause(false));
-                    checkWinner(false);
-                }, 1000);
+                }, 500);
             } else {
                 //console.log('CPU cannot move at', aI, bI);
-                cpuMove();
+                cpuMoveHandler();
             }
         }
     };
 
-    const resetBoard = () => {
-        setCounters(0);
-        setBoardValues(emptyBoard);
+    const userMoveHandler = (aIndex: number, bIndex: number, emptyCell: boolean) => {
+        if (emptyCell) {
+            boardUpdater(aIndex, bIndex, userSymbol);
+            dispatch(setUserTurn(false));
+            dispatch(setPause(true));
+        } else {
+            console.log('cell not empty');
+        }
     };
 
-    const boardUpdater = (aIndex: number, bIndex: number, cpu?: boolean) => {
-        const matrixCopy = [...boardValues];
-        matrixCopy[aIndex][bIndex] = cpu ? cpuSymbol : userSymbol;
+    const resetBoard = () => {
+        console.log('reset board');
+        setCounters(0);
+        dispatch(setBoard(emptyBoard));
+        dispatch(setPlayAgain(false));
+        dispatch(setUserTurn(true));
+    };
+
+    const boardUpdater = (aIndex: number, bIndex: number, updateSymbol: GameSymbols) => {
+        const matrixCopy = deepCopy(board);
+        matrixCopy[aIndex][bIndex] = updateSymbol;
+        console.log('Updation happening at ' + aIndex + ' ' + bIndex + ' with symbol ' + updateSymbol);
         setCounters(counters + 1);
-        setBoardValues(matrixCopy);
+        dispatch(setBoard(matrixCopy));
     };
 
     const checkWinner = (finalCheck: boolean) => {
-        if (hasWon(userSymbol, boardValues)) {
+        if (hasWon(userSymbol, board)) {
             dispatch(setResult('You'));
             dispatch(setPause(true));
             return true;
-        } else if (hasWon(cpuSymbol, boardValues)) {
+        } else if (hasWon(cpuSymbol, board)) {
             dispatch(setResult('CPU'));
             dispatch(setPause(true));
             return true;
@@ -87,38 +118,18 @@ const Board = () => {
         return false;
     };
 
-    const onPressHandler = async (aIndex: number, bIndex: number, emptyCell: boolean) => {
-        console.log('The counters', counters);
-        if (counters <= 4) {
-            if (emptyCell) {
-                boardUpdater(aIndex, bIndex);
-                if (counters >= 2) {
-                    if (!checkWinner(false)) cpuMove();
-                } else {
-                    cpuMove();
-                }
-            } else {
-                console.log('cell not empty');
-            }
-        } else {
-            //console.log('Reached final and is the user winner? ');
-            checkWinner(true);
-            //resetBoard();
-        }
-    };
-
     return (
         <View style={styles.boardContainer}>
-            {boardValues.map((_, aIndex) => {
+            {board.map((_, aIndex) => {
                 return (
                     <View style={{ flexDirection: 'row' }} key={aIndex}>
-                        {boardValues[aIndex].map((value, bIndex) => {
+                        {board[aIndex].map((value, bIndex) => {
                             const emptyCell = value === '';
                             return (
                                 <Cell
                                     key={bIndex}
                                     cellValue={value}
-                                    onPress={() => onPressHandler(aIndex, bIndex, emptyCell)}
+                                    onPress={() => userMoveHandler(aIndex, bIndex, emptyCell)}
                                 />
                             );
                         })}

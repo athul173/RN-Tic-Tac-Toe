@@ -1,14 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Restart, GameSymbols, Result } from '../constants/Types';
+import { PlayAgain, GameSymbols, Result } from '../constants/Types';
 
 const gameSlice = createSlice({
     name: 'game',
     initialState: {
         pause: true,
-        userTurn: true,
+        userTurn: false,
         result: '',
-        restart: null as Restart,
+        playAgain: null as PlayAgain,
         userSymbol: 'O' as GameSymbols,
+        board: [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', ''],
+        ],
     },
     reducers: {
         setUserTurn(state, action: PayloadAction<boolean>) {
@@ -20,14 +25,21 @@ const gameSlice = createSlice({
         setResult(state, action: PayloadAction<Result>) {
             state.result = action.payload;
         },
-        setRestart(state, action: PayloadAction<Restart>) {
-            state.restart = action.payload;
+        setPlayAgain(state, action: PayloadAction<PlayAgain>) {
+            state.playAgain = action.payload;
         },
         setUserSymbol(state, action: PayloadAction<GameSymbols>) {
             state.userSymbol = action.payload;
         },
+        setBoard(state, action: PayloadAction<string[][]>) {
+            console.log('changing to board ', action.payload);
+            return {
+                ...state,
+                board: action.payload,
+            };
+        },
     },
 });
 
-export const { setUserTurn, setPause, setResult, setRestart, setUserSymbol } = gameSlice.actions;
+export const { setUserTurn, setPause, setResult, setPlayAgain, setUserSymbol, setBoard } = gameSlice.actions;
 export default gameSlice.reducer;

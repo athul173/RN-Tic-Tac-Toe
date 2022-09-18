@@ -1,7 +1,7 @@
 import { View, Text, Modal, Alert } from 'react-native';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { setPause, setResult, setRestart, setUserSymbol } from '../store/game';
+import { setPause, setResult, setPlayAgain, setUserSymbol } from '../store/game';
 import RoundedButton from './RoundedButton';
 import { useStyles } from '../style/styles';
 
@@ -18,7 +18,7 @@ const Popup = ({ modalVisible, setModalVisible }: Props) => {
     const userSymbolSelector = () => {
         dispatch(setPause(false));
         dispatch(setResult(''));
-        dispatch(setRestart(true));
+        dispatch(setPlayAgain(true));
     };
 
     const buttonHandler = (symbol: 'O' | 'X') => {

@@ -12,9 +12,9 @@ const Play = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
 
-    const { userTurn, pause, result, restart } = useSelector((state: RootState) => state.game);
+    const { userTurn, pause, result, playAgain } = useSelector((state: RootState) => state.game);
 
-    const buttonTitle = restart !== null ? 'Play Again' : 'Start game';
+    const buttonTitle = playAgain !== null ? 'Play Again' : 'Start game';
 
     const turnIndicator = `It's ${userTurn ? 'your' : `CPU's`} turn`;
 
@@ -28,7 +28,7 @@ const Play = () => {
         return (
             <>
                 {result === '' ? (
-                    <Text style={styles.labelText}>{restart === null ? 'Welcome !' : turnIndicator}</Text>
+                    <Text style={styles.labelText}>{playAgain === null ? 'Welcome !' : turnIndicator}</Text>
                 ) : (
                     <Text style={styles.labelText}>{isDrawCheckText}</Text>
                 )}
