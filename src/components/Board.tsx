@@ -4,7 +4,7 @@ import { useStyles } from '../style/styles';
 import { Cell } from '.';
 import { useWinnerCheck, useDeepCopy } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserTurn, setPause, setResult, setPlayAgain, setBoard } from '../store/game';
+import { setUserTurn, setPause, setResult, setPlayAgain, setBoard, setStop } from '../store/game';
 import { RootState } from '../store';
 import { GameSymbols, Result } from '../constants/Types';
 
@@ -39,11 +39,13 @@ const Board = () => {
                     break;
                 case counters >= 5 && counters < 9:
                     if (!userTurn && !checkWinner(false)) {
+                        console.log('No winner so going to run', !checkWinner(false));
                         cpuMoveHandler();
                     }
                     break;
                 default:
                     checkWinner(true);
+                    break;
             }
         }
     }, [userTurn]);
@@ -98,19 +100,18 @@ const Board = () => {
     const boardUpdater = (aIndex: number, bIndex: number, updateSymbol: GameSymbols) => {
         const matrixCopy = deepCopy(board);
         matrixCopy[aIndex][bIndex] = updateSymbol;
-        console.log('Updation happening at ' + aIndex + ' ' + bIndex + ' with symbol ' + updateSymbol);
+        console.log('Updating happening at ' + aIndex + ' ' + bIndex + ' with symbol ' + updateSymbol);
         setCounters(counters + 1);
         dispatch(setBoard(matrixCopy));
     };
 
     const checkWinner = (finalCheck: boolean) => {
         if (hasWon(userSymbol, board)) {
-            showResult('You');
+            return showResult('You');
         } else if (hasWon(cpuSymbol, board)) {
-            showResult('CPU');
-            return true;
+            return showResult('CPU');
         } else if (finalCheck) {
-            showResult('Draw');
+            return showResult('Draw');
         }
         return false;
     };
@@ -118,6 +119,7 @@ const Board = () => {
     const showResult = (resultString: Result) => {
         dispatch(setResult(resultString));
         dispatch(setPause(true));
+        dispatch(setStop(true));
         return true;
     };
 

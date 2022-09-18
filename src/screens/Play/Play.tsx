@@ -39,7 +39,7 @@ const Play = () => {
     const ButtonRenderer = () => {
         return (
             <>
-                {(stop || playAgain !== null) && (
+                {stop && (
                     <CustomButton
                         title={buttonTitle}
                         size=""
