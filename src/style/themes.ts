@@ -17,6 +17,8 @@ const defaultTheme = {
         S: 8,
         M: 12,
         L: 16,
+        xl: 24,
+        xxl: 32,
     },
 };
 

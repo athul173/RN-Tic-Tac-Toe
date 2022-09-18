@@ -74,6 +74,7 @@ export const useStyles = () => {
         },
         modalView: {
             margin: 20,
+            flex: 1 / 3,
             backgroundColor: 'white',
             borderRadius: 20,
             padding: 35,
@@ -89,12 +90,12 @@ export const useStyles = () => {
         },
         symbolSelectorView: {
             flexDirection: 'row',
-            marginVertical: theme.spacing.L,
+            marginVertical: theme.spacing.xxl,
         },
         roundedBtnView: {
             justifyContent: 'center',
             alignItems: 'center',
-            margin: theme.spacing.L,
+            margin: theme.spacing.xxl,
         },
         roundedBtn: {
             width: 50,
@@ -104,6 +105,7 @@ export const useStyles = () => {
             alignItems: 'center',
             borderRadius: 100,
         },
+        imageView: { width: 120, height: 120 },
     });
     return styles;
 };

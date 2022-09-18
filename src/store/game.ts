@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PlayAgain, GameSymbols, Result } from '../constants/Types';
+import { PlayAgain, GameSymbols, Result, AIDifficulty } from '../constants/Types';
 
 const gameSlice = createSlice({
     name: 'game',
@@ -15,6 +15,7 @@ const gameSlice = createSlice({
             ['', '', ''],
             ['', '', ''],
         ],
+        difficulty: 'Easy',
     },
     reducers: {
         setUserTurn(state, action: PayloadAction<boolean>) {
@@ -42,8 +43,12 @@ const gameSlice = createSlice({
                 board: action.payload,
             };
         },
+        setDifficulty(state, action: PayloadAction<AIDifficulty>) {
+            state.difficulty = action.payload;
+        },
     },
 });
 
-export const { setUserTurn, setPause, setResult, setPlayAgain, setUserSymbol, setBoard, setStop } = gameSlice.actions;
+export const { setUserTurn, setPause, setResult, setPlayAgain, setUserSymbol, setBoard, setStop, setDifficulty } =
+    gameSlice.actions;
 export default gameSlice.reducer;

@@ -12,7 +12,7 @@ const Board = () => {
     const styles = useStyles();
 
     const dispatch = useDispatch();
-    const { playAgain, userSymbol, userTurn, board, stop } = useSelector((state: RootState) => state.game);
+    const { playAgain, userSymbol, userTurn, board, stop, difficulty } = useSelector((state: RootState) => state.game);
 
     const emptyBoard: ''[][] = [
         ['', '', ''],
@@ -33,7 +33,7 @@ const Board = () => {
         if (!stop) {
             if (!checkWinner()) {
                 if (!userTurn) {
-                    cpuMoveHandler();
+                    cpuMakeMove();
                 }
             }
         }
@@ -46,13 +46,14 @@ const Board = () => {
 
     const cpuSymbol = userSymbol === 'O' ? 'X' : 'O';
 
-    const cpuMoveHandler = () => {
-        const smart = false;
-        cpuMakeMove(smart);
-    };
+    // const cpuMoveHandler = () => {
+    //     const smart = false;
+    //     cpuMakeMove(smart);
+    // };
 
-    const cpuMakeMove = (smart: boolean) => {
+    const cpuMakeMove = () => {
         console.log('Going to move');
+        const smart = difficulty === 'Hard';
         const moveMade = smart ? smartMove(board, cpuSymbol, userSymbol) : randomMove(board);
         boardUpdater(moveMade.aI, moveMade.bI, cpuSymbol);
         dispatch(setUserTurn(true));

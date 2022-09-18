@@ -13,7 +13,7 @@ const RoundedButton = (props: Props) => {
     return (
         <View style={styles.roundedBtnView}>
             <TouchableOpacity onPress={props.onPress} style={styles.roundedBtn}>
-                <Image source={props.icon} style={{ width: 100, height: 100 }} />
+                <Image source={props.icon} style={styles.imageView} />
             </TouchableOpacity>
         </View>
     );

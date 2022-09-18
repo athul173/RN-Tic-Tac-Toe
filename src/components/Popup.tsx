@@ -1,32 +1,40 @@
 import { View, Text, Modal, Alert } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setPause, setResult, setPlayAgain, setUserSymbol, setStop } from '../store/game';
-import RoundedButton from './RoundedButton';
+import { setPause, setResult, setPlayAgain, setUserSymbol, setStop, setDifficulty } from '../store/game';
 import { useStyles } from '../style/styles';
-import { GameSymbols } from '../constants/Types';
+import { AIDifficulty, GameSymbols } from '../constants/Types';
+import SymbolSelectorButton from './SymbolSelectorButtons';
+import DifficultySelectorButtons from './DifficultySelectorButtons';
 
 type Props = {
     modalVisible: boolean;
     setModalVisible: (visible: boolean) => void;
+    iconLabel?: string;
 };
 
 const Popup = ({ modalVisible, setModalVisible }: Props) => {
+    const [secondModal, setSecondModal] = useState<boolean>(false);
+
     const dispatch = useDispatch();
 
     const styles = useStyles();
 
-    const userSymbolSelector = () => {
+    const symbolSelectorButtonHandler = (symbol: GameSymbols) => {
+        dispatch(setUserSymbol(symbol));
+        setModalVisible(false);
+        setSecondModal(true);
+        setModalVisible(true);
+    };
+
+    const difficultyButtonHandler = (difficulty: AIDifficulty) => {
+        dispatch(setDifficulty(difficulty));
+        setModalVisible(false);
+        setSecondModal(false);
         dispatch(setPause(false));
         dispatch(setResult(''));
         dispatch(setStop(false));
         dispatch(setPlayAgain(true));
-    };
-
-    const buttonHandler = (symbol: GameSymbols) => {
-        dispatch(setUserSymbol(symbol));
-        setModalVisible(false); //
-        userSymbolSelector();
     };
 
     return (
@@ -42,20 +50,19 @@ const Popup = ({ modalVisible, setModalVisible }: Props) => {
             >
                 <View style={styles.popUpView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.labelText}>Select your symbol</Text>
+                        <Text style={styles.labelText}>{`Select your ${secondModal ? 'difficulty' : 'symbol'} `}</Text>
                         <View style={styles.symbolSelectorView}>
-                            <RoundedButton
-                                onPress={() => {
-                                    buttonHandler('O');
-                                }}
-                                icon={require('../assets/images/oSymbol.png')}
-                            />
-                            <RoundedButton
-                                onPress={() => {
-                                    buttonHandler('X');
-                                }}
-                                icon={require('../assets/images/xSymbol.png')}
-                            />
+                            {secondModal ? (
+                                <DifficultySelectorButtons
+                                    onPressEasy={() => difficultyButtonHandler('Easy')}
+                                    onPressHard={() => difficultyButtonHandler('Hard')}
+                                />
+                            ) : (
+                                <SymbolSelectorButton
+                                    onPressO={() => symbolSelectorButtonHandler('O')}
+                                    onPressX={() => symbolSelectorButtonHandler('X')}
+                                />
+                            )}
                         </View>
                     </View>
                 </View>
