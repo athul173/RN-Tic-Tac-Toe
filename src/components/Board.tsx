@@ -1,8 +1,8 @@
 import { View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useStyles } from '../style/styles';
 import { Cell } from '.';
-import { useWinnerCheck, useDeepCopy } from '../hooks';
+import { useWinnerCheck, useDeepCopy, useSmartAI, useRandomAI } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserTurn, setPause, setResult, setPlayAgain, setBoard, setStop } from '../store/game';
 import { RootState } from '../store';
@@ -31,52 +31,32 @@ const Board = () => {
         console.log('User turn changed ', userTurn, stop);
 
         if (!stop) {
-            switch (true) {
-                case counters < 5:
-                    if (!userTurn) {
-                        cpuMoveHandler();
-                    }
-                    break;
-                case counters >= 5 && counters < 9:
-                    if (!userTurn && !checkWinner(false)) {
-                        console.log('No winner so going to run', !checkWinner(false));
-                        cpuMoveHandler();
-                    }
-                    break;
-                default:
-                    checkWinner(true);
-                    break;
+            if (!checkWinner()) {
+                if (!userTurn) {
+                    cpuMoveHandler();
+                }
             }
         }
     }, [userTurn]);
 
-    const [counters, setCounters] = useState(0);
-
     const [hasWon] = useWinnerCheck();
     const [deepCopy] = useDeepCopy();
+    const [smartMove] = useSmartAI();
+    const [randomMove] = useRandomAI();
 
     const cpuSymbol = userSymbol === 'O' ? 'X' : 'O';
 
-    //const [userValues, setUserValues] = useState<number[]>([]);
-
     const cpuMoveHandler = () => {
-        console.log('cpu moving and the counter is ', counters);
-        const random = true;
-        if (random) {
-            const aI = Math.floor(Math.random() * 2.9);
-            const bI = Math.floor(Math.random() * 2.9);
-            if (board[aI][bI] === '') {
-                setTimeout(() => {
-                    //console.log('CPU making a move at', aI, bI);
-                    boardUpdater(aI, bI, cpuSymbol);
-                    dispatch(setUserTurn(true));
-                    dispatch(setPause(false));
-                }, 500);
-            } else {
-                //console.log('CPU cannot move at', aI, bI);
-                cpuMoveHandler();
-            }
-        }
+        const smart = false;
+        cpuMakeMove(smart);
+    };
+
+    const cpuMakeMove = (smart: boolean) => {
+        console.log('Going to move');
+        const moveMade = smart ? smartMove(board, cpuSymbol, userSymbol) : randomMove(board);
+        boardUpdater(moveMade.aI, moveMade.bI, cpuSymbol);
+        dispatch(setUserTurn(true));
+        dispatch(setPause(false));
     };
 
     const userMoveHandler = (aIndex: number, bIndex: number, emptyCell: boolean) => {
@@ -91,7 +71,6 @@ const Board = () => {
 
     const resetBoard = () => {
         console.log('reset board');
-        setCounters(0);
         dispatch(setBoard(emptyBoard));
         dispatch(setPlayAgain(false));
         dispatch(setUserTurn(true));
@@ -101,16 +80,15 @@ const Board = () => {
         const matrixCopy = deepCopy(board);
         matrixCopy[aIndex][bIndex] = updateSymbol;
         console.log('Updating happening at ' + aIndex + ' ' + bIndex + ' with symbol ' + updateSymbol);
-        setCounters(counters + 1);
         dispatch(setBoard(matrixCopy));
     };
 
-    const checkWinner = (finalCheck: boolean) => {
-        if (hasWon(userSymbol, board)) {
+    const checkWinner = () => {
+        if (hasWon(board) === userSymbol) {
             return showResult('You');
-        } else if (hasWon(cpuSymbol, board)) {
+        } else if (hasWon(board) === cpuSymbol) {
             return showResult('CPU');
-        } else if (finalCheck) {
+        } else if (hasWon(board) === 'Draw') {
             return showResult('Draw');
         }
         return false;
