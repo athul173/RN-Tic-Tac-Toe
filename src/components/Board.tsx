@@ -12,7 +12,7 @@ const Board = () => {
     const styles = useStyles();
 
     const dispatch = useDispatch();
-    const { playAgain, userSymbol, userTurn, board } = useSelector((state: RootState) => state.game);
+    const { playAgain, userSymbol, userTurn, board, stop } = useSelector((state: RootState) => state.game);
 
     const emptyBoard = [
         ['', '', ''],
@@ -28,21 +28,23 @@ const Board = () => {
     }, [playAgain]);
 
     useEffect(() => {
-        console.log('User turn changed ', userTurn);
+        console.log('User turn changed ', userTurn, stop);
 
-        switch (true) {
-            case counters < 5:
-                if (!userTurn) {
-                    cpuMoveHandler();
-                }
-                break;
-            case counters >= 5 && counters < 9:
-                if (!userTurn && !checkWinner(false)) {
-                    cpuMoveHandler();
-                }
-                break;
-            default:
-                checkWinner(true);
+        if (!stop) {
+            switch (true) {
+                case counters < 5:
+                    if (!userTurn) {
+                        cpuMoveHandler();
+                    }
+                    break;
+                case counters >= 5 && counters < 9:
+                    if (!userTurn && !checkWinner(false)) {
+                        cpuMoveHandler();
+                    }
+                    break;
+                default:
+                    checkWinner(true);
+            }
         }
     }, [userTurn]);
 

@@ -5,6 +5,7 @@ const gameSlice = createSlice({
     name: 'game',
     initialState: {
         pause: true,
+        stop: true,
         userTurn: false,
         result: '',
         playAgain: null as PlayAgain,
@@ -21,6 +22,9 @@ const gameSlice = createSlice({
         },
         setPause(state, action: PayloadAction<boolean>) {
             state.pause = action.payload;
+        },
+        setStop(state, action: PayloadAction<boolean>) {
+            state.stop = action.payload;
         },
         setResult(state, action: PayloadAction<Result>) {
             state.result = action.payload;
@@ -41,5 +45,5 @@ const gameSlice = createSlice({
     },
 });
 
-export const { setUserTurn, setPause, setResult, setPlayAgain, setUserSymbol, setBoard } = gameSlice.actions;
+export const { setUserTurn, setPause, setResult, setPlayAgain, setUserSymbol, setBoard, setStop } = gameSlice.actions;
 export default gameSlice.reducer;

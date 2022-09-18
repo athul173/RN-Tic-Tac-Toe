@@ -13,6 +13,7 @@ const reducers = combineReducers({
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
+    blacklist: ['stack'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
