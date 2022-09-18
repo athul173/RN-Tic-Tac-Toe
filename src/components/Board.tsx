@@ -6,7 +6,7 @@ import { useWinnerCheck, useDeepCopy } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserTurn, setPause, setResult, setPlayAgain, setBoard } from '../store/game';
 import { RootState } from '../store';
-import { GameSymbols } from '../constants/Types';
+import { GameSymbols, Result } from '../constants/Types';
 
 const Board = () => {
     const styles = useStyles();
@@ -14,7 +14,7 @@ const Board = () => {
     const dispatch = useDispatch();
     const { playAgain, userSymbol, userTurn, board, stop } = useSelector((state: RootState) => state.game);
 
-    const emptyBoard = [
+    const emptyBoard: ''[][] = [
         ['', '', ''],
         ['', '', ''],
         ['', '', ''],
@@ -105,19 +105,20 @@ const Board = () => {
 
     const checkWinner = (finalCheck: boolean) => {
         if (hasWon(userSymbol, board)) {
-            dispatch(setResult('You'));
-            dispatch(setPause(true));
-            return true;
+            showResult('You');
         } else if (hasWon(cpuSymbol, board)) {
-            dispatch(setResult('CPU'));
-            dispatch(setPause(true));
+            showResult('CPU');
             return true;
         } else if (finalCheck) {
-            dispatch(setResult('Draw'));
-            dispatch(setPause(true));
-            return true;
+            showResult('Draw');
         }
         return false;
+    };
+
+    const showResult = (resultString: Result) => {
+        dispatch(setResult(resultString));
+        dispatch(setPause(true));
+        return true;
     };
 
     return (
@@ -130,7 +131,7 @@ const Board = () => {
                             return (
                                 <Cell
                                     key={bIndex}
-                                    cellValue={value}
+                                    cellValue={value as GameSymbols | ''}
                                     onPress={() => userMoveHandler(aIndex, bIndex, emptyCell)}
                                 />
                             );

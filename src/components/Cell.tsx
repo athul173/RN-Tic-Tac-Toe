@@ -3,9 +3,10 @@ import React from 'react';
 import { useStyles } from '../style/styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import { GameSymbols } from '../constants/Types';
 
 interface CellProps {
-    cellValue: string;
+    cellValue: GameSymbols | '';
     onPress: () => void;
 }
 

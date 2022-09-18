@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { setPause, setResult, setPlayAgain, setUserSymbol, setStop } from '../store/game';
 import RoundedButton from './RoundedButton';
 import { useStyles } from '../style/styles';
+import { GameSymbols } from '../constants/Types';
 
 type Props = {
     modalVisible: boolean;
@@ -22,7 +23,7 @@ const Popup = ({ modalVisible, setModalVisible }: Props) => {
         dispatch(setPlayAgain(true));
     };
 
-    const buttonHandler = (symbol: 'O' | 'X') => {
+    const buttonHandler = (symbol: GameSymbols) => {
         dispatch(setUserSymbol(symbol));
         setModalVisible(false); //
         userSymbolSelector();

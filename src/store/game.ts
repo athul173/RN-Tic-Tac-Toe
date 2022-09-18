@@ -35,7 +35,7 @@ const gameSlice = createSlice({
         setUserSymbol(state, action: PayloadAction<GameSymbols>) {
             state.userSymbol = action.payload;
         },
-        setBoard(state, action: PayloadAction<string[][]>) {
+        setBoard(state, action: PayloadAction<GameSymbols[][] | ''[][]>) {
             console.log('changing to board ', action.payload);
             return {
                 ...state,

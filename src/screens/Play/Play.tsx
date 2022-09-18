@@ -12,7 +12,7 @@ const Play = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
 
-    const { userTurn, pause, result, playAgain, stop } = useSelector((state: RootState) => state.game);
+    const { userTurn, result, playAgain, stop } = useSelector((state: RootState) => state.game);
 
     const buttonTitle = playAgain !== null ? 'Play Again' : 'Start game';
 
@@ -39,7 +39,7 @@ const Play = () => {
     const ButtonRenderer = () => {
         return (
             <>
-                {(stop || playAgain === null) && (
+                {(stop || playAgain !== null) && (
                     <CustomButton
                         title={buttonTitle}
                         size=""

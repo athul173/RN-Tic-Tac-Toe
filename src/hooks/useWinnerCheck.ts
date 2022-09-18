@@ -1,5 +1,7 @@
+import { GameSymbols } from '../constants/Types';
+
 const useWinnerCheck = () => {
-    const hasWon = (symbol: 'O' | 'X', board: string[][]) =>
+    const hasWon = (symbol: GameSymbols, board: string[][]) =>
         horizontalChecker(symbol, board) ||
         horizontalChecker(symbol, boardTransposer(board)) ||
         hasWonDiagonally(symbol, board);
@@ -30,7 +32,7 @@ const useWinnerCheck = () => {
         return diagonalValues;
     };
 
-    const hasWonDiagonally = (symbol: 'O' | 'X', board: string[][]) => {
+    const hasWonDiagonally = (symbol: GameSymbols, board: string[][]) => {
         const winnerChecker = getDiagonalValues(board).some((moves) => moves.every((move) => move === symbol));
         console.log('Diagonal Winner ' + winnerChecker + ' for ' + symbol);
         return winnerChecker;
@@ -40,7 +42,7 @@ const useWinnerCheck = () => {
         return board[0].map((_, i) => board.map((row) => row[i]));
     };
 
-    const horizontalChecker = (symbol: 'O' | 'X', board: string[][]) => {
+    const horizontalChecker = (symbol: GameSymbols, board: string[][]) => {
         const winnerChecker = board.some((moves) => moves.every((move) => move === symbol));
         console.log('Horizontal Winner ' + winnerChecker + 'for ' + symbol);
         return winnerChecker;
