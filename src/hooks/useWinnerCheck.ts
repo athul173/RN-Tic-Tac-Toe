@@ -1,49 +1,60 @@
 const useWinnerCheck = () => {
-    const hasWon = (symbol: 'O' | 'X', board: string[][]) =>
-        horizontalChecker(symbol, board) ||
-        horizontalChecker(symbol, boardTransposer(board)) ||
-        hasWonDiagonally(symbol, board);
+    const hasWon = (board: string[][]) => {
+        const winner: {
+            winner: string | null;
+            winningCombination: string[];
+        } = {
+            winner: null,
+            winningCombination: ['', '', ''],
+        };
 
-    const getDiagonalValues = (board: string[][]) => {
-        const diagonalValues = [];
-        const equalDiagonal: string[] = [];
-        const oppositeDiagonal: string[] = [];
+        for (let i = 0; i < 3; i++) {
+            if (equalSymbolsCheck(board[i][0], board[i][1], board[i][2])) {
+                winner.winner = board[i][0];
+                winner.winningCombination = [`${i}0`, `${i}1`, `${i}2`];
+            }
+        }
 
-        board.forEach((row, rowIndex) => {
-            row.forEach((col, colIndex) => {
-                if (rowIndex === colIndex) {
-                    equalDiagonal.push(board[rowIndex][colIndex]);
+        for (let i = 0; i < 3; i++) {
+            if (equalSymbolsCheck(board[0][i], board[1][i], board[2][i])) {
+                winner.winner = board[0][i];
+                winner.winningCombination = [`0${i}`, `1${i}`, `2${i}`];
+            }
+        }
+
+        if (equalSymbolsCheck(board[0][0], board[1][1], board[2][2])) {
+            winner.winner = board[0][0];
+            winner.winningCombination = [`00`, `11`, `22`];
+        }
+        if (equalSymbolsCheck(board[2][0], board[1][1], board[0][2])) {
+            winner.winner = board[2][0];
+            winner.winningCombination = [`20`, `11`, `02`];
+        }
+
+        //Return winner
+        if (winner.winner === null && gameFinished(board)) {
+            winner.winner = 'Draw';
+            winner.winningCombination = ['', '', ''];
+            return winner;
+        } else {
+            return winner;
+        }
+    };
+
+    const gameFinished = (board: string[][]) => {
+        let emptyCells = 0;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (board[i][j] == '') {
+                    emptyCells++;
                 }
-            });
-        });
-
-        board.forEach((row, rowIndex) => {
-            row.forEach((col, colIndex) => {
-                if (rowIndex + colIndex === board.length - 1) {
-                    oppositeDiagonal.push(board[rowIndex][colIndex]);
-                }
-            });
-        });
-
-        diagonalValues.push(equalDiagonal, oppositeDiagonal);
-        console.log('Diagonal moves: ' + diagonalValues);
-        return diagonalValues;
+            }
+        }
+        return emptyCells === 0;
     };
 
-    const hasWonDiagonally = (symbol: 'O' | 'X', board: string[][]) => {
-        const winnerChecker = getDiagonalValues(board).some((moves) => moves.every((move) => move === symbol));
-        console.log('Diagonal Winner ' + winnerChecker + ' for ' + symbol);
-        return winnerChecker;
-    };
-
-    const boardTransposer = (board: string[][]) => {
-        return board[0].map((_, i) => board.map((row) => row[i]));
-    };
-
-    const horizontalChecker = (symbol: 'O' | 'X', board: string[][]) => {
-        const winnerChecker = board.some((moves) => moves.every((move) => move === symbol));
-        console.log('Horizontal Winner ' + winnerChecker + 'for ' + symbol);
-        return winnerChecker;
+    const equalSymbolsCheck = (first: string, second: string, third: string) => {
+        return first == second && second == third && first != '';
     };
 
     return [hasWon];

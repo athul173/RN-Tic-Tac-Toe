@@ -10,11 +10,18 @@ const defaultTheme = {
         grey: palette.grey,
         transparent: palette.transparent,
         black: palette.black,
+        blue: palette.blue,
+        red: palette.red,
+        oSymbol: palette.darkBlue,
+        xSymbol: palette.pink,
+        winningColor: palette.yellow,
     },
     spacing: {
         S: 8,
         M: 12,
         L: 16,
+        xl: 24,
+        xxl: 32,
     },
 };
 

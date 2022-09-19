@@ -1,50 +1,90 @@
 import { View, Text } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { useStyles } from '../../style/styles';
-import { Board, CustomButton } from '../../components';
+import { Board, CustomButton, Popup, RoundedButton, WinningsHistory } from '../../components';
 import { useTheme } from '../../style/themes';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { setPause, setRestart, setResult } from '../../store/game';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const Play = () => {
     const styles = useStyles();
     const theme = useTheme();
 
-    const dispatch = useDispatch();
+    const [modalVisible, setModalVisible] = useState(false);
+    const [historyVisible, setHistoryVisible] = useState(false);
 
-    const { userTurn, pause, result, restart } = useSelector((state: RootState) => state.game);
+    const { userTurn, result, playAgain, stop } = useSelector((state: RootState) => state.game);
 
-    const handleButton = () => {
-        dispatch(setPause(false));
-        dispatch(setResult(''));
-        dispatch(setRestart(true));
+    const buttonTitle = playAgain !== null ? 'Play Again' : 'Start game';
+
+    const turnIndicator = `It's ${userTurn ? 'your' : `CPU's`} turn`;
+
+    const isDrawCheckText = result !== 'Draw' ? `${result} Won!` : `It's a draw!`;
+
+    const handleGameButton = () => {
+        setModalVisible(true);
+    };
+
+    const handleHistoryButton = () => {
+        setHistoryVisible(true);
+    };
+
+    const LabelRenderer = () => {
+        return (
+            <>
+                {result === '' ? (
+                    <Text style={styles.labelText}>{playAgain === null ? 'Welcome !' : turnIndicator}</Text>
+                ) : (
+                    <Text style={styles.labelText}>{isDrawCheckText}</Text>
+                )}
+            </>
+        );
+    };
+
+    const ButtonRenderer = () => {
+        return (
+            <>
+                {stop && (
+                    <CustomButton
+                        title={buttonTitle}
+                        size=""
+                        onPress={handleGameButton}
+                        backgroundColor={theme.color.primary}
+                    />
+                )}
+            </>
+        );
+    };
+
+    const HistoryRenderer = () => {
+        return (
+            <>
+                {stop ? (
+                    <RoundedButton
+                        size={40}
+                        onPress={handleHistoryButton}
+                        icon={require('../../assets/images/history.png')}
+                    ></RoundedButton>
+                ) : (
+                    <View style={{ width: 80, backgroundColor: 'black' }}></View>
+                )}
+            </>
+        );
     };
 
     return (
         <View style={styles.container}>
+            <Popup modalVisible={modalVisible} setModalVisible={setModalVisible} />
+            <WinningsHistory modalVisible={historyVisible} setModalVisible={setHistoryVisible} />
             <View style={styles.headerContainer}>
+                <View style={{ width: 80, backgroundColor: 'black' }}></View>
                 <Text style={styles.titleText}>Tic Tac Toe!</Text>
+                <HistoryRenderer />
             </View>
             <Board />
             <View style={styles.footerContainer}>
-                {result === '' ? (
-                    <Text style={styles.labelText}>
-                        {restart === null ? 'Welcome !' : `It's ${userTurn ? 'your' : `CPU's`} turn`}
-                    </Text>
-                ) : (
-                    <Text style={styles.labelText}>{result !== 'Draw' ? `${result} Won!` : `It's a draw!`}</Text>
-                )}
-                {(pause && userTurn) || result !== '' ? (
-                    <CustomButton
-                        title="Start game"
-                        size=""
-                        onPress={handleButton}
-                        backgroundColor={theme.color.primary}
-                    />
-                ) : (
-                    <></>
-                )}
+                <LabelRenderer />
+                <ButtonRenderer />
             </View>
         </View>
     );

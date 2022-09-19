@@ -8,21 +8,49 @@
  * @format
  */
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { SafeAreaView, StatusBar, useColorScheme } from 'react-native';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
+import { persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import { AppStackRoutes } from './src/Routes/Navigation';
 import Play from './src/screens/Play';
-import { store } from './src/store/store';
+import Splash from './src/screens/Splash';
+import store, { RootState } from './src/store';
+
+const Stack = createNativeStackNavigator<AppStackRoutes>();
 
 const App = () => {
     const darkMode = useColorScheme();
 
+    const Navigator = () => {
+        const { welcome } = useSelector((state: RootState) => state.stack);
+
+        return (
+            <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Splash">
+                {welcome ? (
+                    <Stack.Screen name="Splash" component={Splash} />
+                ) : (
+                    <Stack.Screen name="Play" component={Play} />
+                )}
+            </Stack.Navigator>
+        );
+    };
+
+    const persistor = persistStore(store);
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar barStyle={darkMode ? 'dark-content' : 'light-content'} />
-            <Provider store={store}>
-                <Play />
-            </Provider>
+            <NavigationContainer>
+                <Provider store={store}>
+                    <PersistGate loading={null} persistor={persistor}>
+                        <Navigator />
+                    </PersistGate>
+                </Provider>
+            </NavigationContainer>
         </SafeAreaView>
     );
 };

@@ -1,125 +1,138 @@
 import { View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useStyles } from '../style/styles';
 import { Cell } from '.';
-import useWinnerCheck from '../hooks';
+import { useWinnerCheck, useDeepCopy, useSmartAI, useRandomAI } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserTurn, setPause, setResult, setRestart } from '../store/game';
-import { RootState } from '../store/store';
+import {
+    setUserTurn,
+    setPause,
+    setResult,
+    setPlayAgain,
+    setBoard,
+    setStop,
+    setWinningsCounter,
+    setWinningCombination,
+} from '../store/game';
+import { RootState } from '../store';
+import { GameSymbols, Result, WinningCombinations } from '../constants/Types';
 
 const Board = () => {
     const styles = useStyles();
 
     const dispatch = useDispatch();
-    const { restart } = useSelector((state: RootState) => state.game);
+    const { playAgain, userSymbol, userTurn, board, stop, difficulty, winningCombination } = useSelector(
+        (state: RootState) => state.game,
+    );
 
-    const emptyBoard = [
+    const emptyBoard: ''[][] = [
         ['', '', ''],
         ['', '', ''],
         ['', '', ''],
     ];
 
     useEffect(() => {
-        if (restart) {
+        if (playAgain) {
+            console.log('Restart use Effect');
             resetBoard();
-            dispatch(setRestart(false));
         }
-    }, [restart]);
+    }, [playAgain]);
 
-    const [boardValues, setBoardValues] = useState(emptyBoard);
-    const [counters, setCounters] = useState(0);
+    useEffect(() => {
+        console.log('User turn changed ', userTurn, stop);
+
+        if (!stop) {
+            if (!checkWinner()) {
+                if (!userTurn) {
+                    cpuMakeMove();
+                }
+            }
+        }
+    }, [userTurn]);
 
     const [hasWon] = useWinnerCheck();
+    const [deepCopy] = useDeepCopy();
+    const [smartMove] = useSmartAI();
+    const [randomMove] = useRandomAI();
 
-    const userSymbol = 'O';
-    const cpuSymbol = 'X';
+    const cpuSymbol = userSymbol === 'O' ? 'X' : 'O';
 
-    //const [userValues, setUserValues] = useState<number[]>([]);
+    // const cpuMoveHandler = () => {
+    //     const smart = false;
+    //     cpuMakeMove(smart);
+    // };
 
-    const cpuMove = () => {
-        const random = true;
-        if (random) {
-            const aI = Math.floor(Math.random() * 2.9);
-            const bI = Math.floor(Math.random() * 2.9);
-            //console.log('Got values', aI, bI);
-            if (boardValues[aI][bI] === '') {
-                dispatch(setUserTurn(false));
-                dispatch(setPause(true));
-                setTimeout(() => {
-                    //console.log('CPU making a move at', aI, bI);
-                    boardUpdater(aI, bI, true);
-                    dispatch(setUserTurn(true));
-                    dispatch(setPause(false));
-                    checkWinner(false);
-                }, 1000);
-            } else {
-                //console.log('CPU cannot move at', aI, bI);
-                cpuMove();
-            }
+    const cpuMakeMove = () => {
+        console.log('Going to move');
+        const smart = difficulty === 'Hard';
+        const moveMade = smart ? smartMove(board, cpuSymbol, userSymbol) : randomMove(board);
+        boardUpdater(moveMade.aI, moveMade.bI, cpuSymbol);
+        dispatch(setUserTurn(true));
+        dispatch(setPause(false));
+    };
+
+    const userMoveHandler = (aIndex: number, bIndex: number, emptyCell: boolean) => {
+        if (emptyCell) {
+            boardUpdater(aIndex, bIndex, userSymbol);
+            dispatch(setUserTurn(false));
+            dispatch(setPause(true));
+        } else {
+            console.log('cell not empty');
         }
     };
 
     const resetBoard = () => {
-        setCounters(0);
-        setBoardValues(emptyBoard);
+        console.log('reset board');
+        dispatch(setBoard(emptyBoard));
+        dispatch(setPlayAgain(false));
+        dispatch(setUserTurn(true));
     };
 
-    const boardUpdater = (aIndex: number, bIndex: number, cpu?: boolean) => {
-        const matrixCopy = [...boardValues];
-        matrixCopy[aIndex][bIndex] = cpu ? cpuSymbol : userSymbol;
-        setCounters(counters + 1);
-        setBoardValues(matrixCopy);
+    const boardUpdater = (aIndex: number, bIndex: number, updateSymbol: GameSymbols) => {
+        const matrixCopy = deepCopy(board);
+        matrixCopy[aIndex][bIndex] = updateSymbol;
+        console.log('Updating happening at ' + aIndex + ' ' + bIndex + ' with symbol ' + updateSymbol);
+        dispatch(setBoard(matrixCopy));
     };
 
-    const checkWinner = (finalCheck: boolean) => {
-        if (hasWon(userSymbol, boardValues)) {
-            dispatch(setResult('You'));
-            dispatch(setPause(true));
-            return true;
-        } else if (hasWon(cpuSymbol, boardValues)) {
-            dispatch(setResult('CPU'));
-            dispatch(setPause(true));
-            return true;
-        } else if (finalCheck) {
-            dispatch(setResult('Draw'));
-            dispatch(setPause(true));
-            return true;
+    const checkWinner = () => {
+        const winningInformation = hasWon(board);
+        const winner = winningInformation.winner;
+        const winningCombination = winningInformation.winningCombination;
+        if (winner === userSymbol) {
+            return showResult('You', winningCombination);
+        } else if (winner === cpuSymbol) {
+            return showResult('CPU', winningCombination);
+        } else if (winner === 'Draw') {
+            return showResult('Draw', winningCombination);
         }
         return false;
     };
 
-    const onPressHandler = async (aIndex: number, bIndex: number, emptyCell: boolean) => {
-        console.log('The counters', counters);
-        if (counters <= 4) {
-            if (emptyCell) {
-                boardUpdater(aIndex, bIndex);
-                if (counters >= 2) {
-                    if (!checkWinner(false)) cpuMove();
-                } else {
-                    cpuMove();
-                }
-            } else {
-                console.log('cell not empty');
-            }
-        } else {
-            //console.log('Reached final and is the user winner? ');
-            checkWinner(true);
-            //resetBoard();
-        }
+    const showResult = (resultString: Result, combination: WinningCombinations) => {
+        console.log('Heres the winning combo ', combination);
+        dispatch(setWinningsCounter(resultString));
+        dispatch(setWinningCombination(combination));
+        dispatch(setResult(resultString));
+        dispatch(setPause(true));
+        dispatch(setStop(true));
+        return true;
     };
 
     return (
         <View style={styles.boardContainer}>
-            {boardValues.map((_, aIndex) => {
+            {board.map((_, aIndex) => {
                 return (
                     <View style={{ flexDirection: 'row' }} key={aIndex}>
-                        {boardValues[aIndex].map((value, bIndex) => {
+                        {board[aIndex].map((value, bIndex) => {
                             const emptyCell = value === '';
+                            const winningCombinationCell = winningCombination.includes(`${aIndex}${bIndex}`);
                             return (
                                 <Cell
                                     key={bIndex}
-                                    cellValue={value}
-                                    onPress={() => onPressHandler(aIndex, bIndex, emptyCell)}
+                                    winningCombinationCell={winningCombinationCell}
+                                    cellValue={value as GameSymbols | ''}
+                                    onPress={() => userMoveHandler(aIndex, bIndex, emptyCell)}
                                 />
                             );
                         })}
