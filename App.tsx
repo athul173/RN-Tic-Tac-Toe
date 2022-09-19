@@ -19,11 +19,13 @@ import { AppStackRoutes } from './src/Routes/Navigation';
 import Play from './src/screens/Play';
 import Splash from './src/screens/Splash';
 import store, { RootState } from './src/store';
+import { useTheme } from './src/style/themes';
 
 const Stack = createNativeStackNavigator<AppStackRoutes>();
 
 const App = () => {
     const darkMode = useColorScheme();
+    const theme = useTheme();
 
     const Navigator = () => {
         const { welcome } = useSelector((state: RootState) => state.stack);
@@ -43,7 +45,10 @@ const App = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <StatusBar barStyle={darkMode ? 'dark-content' : 'light-content'} />
+            <StatusBar
+                backgroundColor={theme.color.appBackground}
+                barStyle={darkMode ? 'dark-content' : 'light-content'}
+            />
             <NavigationContainer>
                 <Provider store={store}>
                     <PersistGate loading={null} persistor={persistor}>
