@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import React, { useState } from 'react';
 import { useStyles } from '../../style/styles';
 import { Board, CustomButton, Popup, RoundedButton, WinningsHistory } from '../../components';
@@ -9,6 +9,7 @@ import { RootState } from '../../store';
 const Play = () => {
     const styles = useStyles();
     const theme = useTheme();
+    const { width } = Dimensions.get('window');
 
     const [modalVisible, setModalVisible] = useState(false);
     const [historyVisible, setHistoryVisible] = useState(false);
@@ -66,7 +67,7 @@ const Play = () => {
                         icon={require('../../assets/images/history.png')}
                     ></RoundedButton>
                 ) : (
-                    <View style={{ width: 80, backgroundColor: 'black' }}></View>
+                    <View style={{ width: width / 5, backgroundColor: 'black' }}></View>
                 )}
             </>
         );
@@ -76,9 +77,9 @@ const Play = () => {
         <View style={styles.container}>
             <Popup modalVisible={modalVisible} setModalVisible={setModalVisible} />
             <WinningsHistory modalVisible={historyVisible} setModalVisible={setHistoryVisible} />
-            <View style={styles.headerContainer}>
-                <View style={{ width: 80, backgroundColor: 'black' }}></View>
-                <Text style={styles.titleText}>Tic Tac Toe!</Text>
+            <View style={{ ...styles.headerContainer, width: width }}>
+                <View style={{ width: width / 5, backgroundColor: 'black' }}></View>
+                <Text style={{ ...styles.titleText, width: width - (width + width) / 5 }}>Tic Tac Toe!</Text>
                 <HistoryRenderer />
             </View>
             <Board />

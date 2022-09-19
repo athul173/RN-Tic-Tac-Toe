@@ -57,7 +57,7 @@ export const useStyles = (winningCombination?: boolean, size?: number) => {
             fontFamily: 'Cormorant-Bold',
             textAlign: 'center',
             fontSize: 40,
-            margin: 15,
+            marginVertical: 15,
             color: theme.color.grey,
         },
         labelText: { fontFamily: 'Cormorant-Bold', fontSize: 25, color: 'black' },
@@ -128,7 +128,7 @@ export const useStyles = (winningCombination?: boolean, size?: number) => {
         roundedBtnView: {
             justifyContent: 'center',
             alignItems: 'center',
-            margin: theme.spacing.xxl,
+            margin: theme.spacing.L,
         },
         roundedBtn: {
             width: 50,
