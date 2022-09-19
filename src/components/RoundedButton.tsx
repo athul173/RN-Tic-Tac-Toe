@@ -5,10 +5,11 @@ import { useStyles } from '../style/styles';
 type Props = {
     onPress?: () => void;
     icon: ImageSourcePropType;
+    size?: number;
 };
 
 const RoundedButton = (props: Props) => {
-    const styles = useStyles();
+    const styles = useStyles(props.size);
 
     return (
         <View style={styles.roundedBtnView}>

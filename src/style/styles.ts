@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from './themes';
 
-export const useStyles = () => {
+export const useStyles = (size?: number) => {
     const theme = useTheme();
 
     const styles = StyleSheet.create({
@@ -11,6 +11,9 @@ export const useStyles = () => {
         },
         headerContainer: {
             flex: 1 / 5,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexDirection: 'row',
         },
         footerContainer: {
             flex: 0.3,
@@ -41,7 +44,7 @@ export const useStyles = () => {
         titleText: {
             fontFamily: 'Cormorant-Bold',
             textAlign: 'center',
-            fontSize: 45,
+            fontSize: 40,
             margin: 15,
             color: theme.color.grey,
         },
@@ -105,7 +108,7 @@ export const useStyles = () => {
             alignItems: 'center',
             borderRadius: 100,
         },
-        imageView: { width: 120, height: 120 },
+        imageView: { width: size ? size : 120, height: size ? size : 120 },
     });
     return styles;
 };

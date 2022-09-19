@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 import React, { useState } from 'react';
 import { useStyles } from '../../style/styles';
-import { Board, CustomButton, Popup } from '../../components';
+import { Board, CustomButton, Popup, RoundedButton } from '../../components';
 import { useTheme } from '../../style/themes';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -55,7 +55,9 @@ const Play = () => {
         <View style={styles.container}>
             <Popup modalVisible={modalVisible} setModalVisible={setModalVisible} />
             <View style={styles.headerContainer}>
+                <View style={{ width: 80, backgroundColor: 'black' }}></View>
                 <Text style={styles.titleText}>Tic Tac Toe!</Text>
+                <RoundedButton size={40} icon={require('../../assets/images/history.png')}></RoundedButton>
             </View>
             <Board />
             <View style={styles.footerContainer}>

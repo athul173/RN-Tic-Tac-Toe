@@ -7,6 +7,7 @@ const [deepCopy] = useDeepCopy();
 
 const useSmartAi = () => {
     const smartMove = (board: string[][], cpuSymbol: GameSymbols, userSymbol: GameSymbols) => {
+        console.log('Getting smart');
         // AI to make its turn
         let bestScore = -100;
         let move = { aI: 0, bI: 0 };
