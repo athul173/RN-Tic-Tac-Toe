@@ -20,6 +20,7 @@ const gameSlice = createSlice({
             CPU: 0,
             User: 0,
         },
+        winningCombination: ['', '', ''],
     },
     reducers: {
         setUserTurn(state, action: PayloadAction<boolean>) {
@@ -41,7 +42,6 @@ const gameSlice = createSlice({
             state.userSymbol = action.payload;
         },
         setBoard(state, action: PayloadAction<GameSymbols[][] | ''[][]>) {
-            console.log('changing to board ', action.payload);
             return {
                 ...state,
                 board: action.payload,
@@ -58,6 +58,12 @@ const gameSlice = createSlice({
                 state.winningsCounter.CPU = state.winningsCounter.CPU + 1;
             }
         },
+        setWinningCombination(state, action: PayloadAction<string[]>) {
+            return {
+                ...state,
+                winningCombination: action.payload,
+            };
+        },
     },
 });
 
@@ -71,5 +77,6 @@ export const {
     setStop,
     setDifficulty,
     setWinningsCounter,
+    setWinningCombination,
 } = gameSlice.actions;
 export default gameSlice.reducer;

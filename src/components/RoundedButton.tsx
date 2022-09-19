@@ -9,7 +9,7 @@ type Props = {
 };
 
 const RoundedButton = (props: Props) => {
-    const styles = useStyles(props.size);
+    const styles = useStyles(null, props.size);
 
     return (
         <View style={styles.roundedBtnView}>

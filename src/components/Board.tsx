@@ -4,15 +4,26 @@ import { useStyles } from '../style/styles';
 import { Cell } from '.';
 import { useWinnerCheck, useDeepCopy, useSmartAI, useRandomAI } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserTurn, setPause, setResult, setPlayAgain, setBoard, setStop, setWinningsCounter } from '../store/game';
+import {
+    setUserTurn,
+    setPause,
+    setResult,
+    setPlayAgain,
+    setBoard,
+    setStop,
+    setWinningsCounter,
+    setWinningCombination,
+} from '../store/game';
 import { RootState } from '../store';
-import { GameSymbols, Result } from '../constants/Types';
+import { GameSymbols, Result, WinningCombinations } from '../constants/Types';
 
 const Board = () => {
     const styles = useStyles();
 
     const dispatch = useDispatch();
-    const { playAgain, userSymbol, userTurn, board, stop, difficulty } = useSelector((state: RootState) => state.game);
+    const { playAgain, userSymbol, userTurn, board, stop, difficulty, winningCombination } = useSelector(
+        (state: RootState) => state.game,
+    );
 
     const emptyBoard: ''[][] = [
         ['', '', ''],
@@ -85,18 +96,23 @@ const Board = () => {
     };
 
     const checkWinner = () => {
-        if (hasWon(board) === userSymbol) {
-            return showResult('You');
-        } else if (hasWon(board) === cpuSymbol) {
-            return showResult('CPU');
-        } else if (hasWon(board) === 'Draw') {
-            return showResult('Draw');
+        const winningInformation = hasWon(board);
+        const winner = winningInformation.winner;
+        const winningCombination = winningInformation.winningCombination;
+        if (winner === userSymbol) {
+            return showResult('You', winningCombination);
+        } else if (winner === cpuSymbol) {
+            return showResult('CPU', winningCombination);
+        } else if (winner === 'Draw') {
+            return showResult('Draw', winningCombination);
         }
         return false;
     };
 
-    const showResult = (resultString: Result) => {
+    const showResult = (resultString: Result, combination: WinningCombinations) => {
+        console.log('Heres the winning combo ', combination);
         dispatch(setWinningsCounter(resultString));
+        dispatch(setWinningCombination(combination));
         dispatch(setResult(resultString));
         dispatch(setPause(true));
         dispatch(setStop(true));
@@ -110,9 +126,11 @@ const Board = () => {
                     <View style={{ flexDirection: 'row' }} key={aIndex}>
                         {board[aIndex].map((value, bIndex) => {
                             const emptyCell = value === '';
+                            const winningCombinationCell = winningCombination.includes(`${aIndex}${bIndex}`);
                             return (
                                 <Cell
                                     key={bIndex}
+                                    winningCombinationCell={winningCombinationCell}
                                     cellValue={value as GameSymbols | ''}
                                     onPress={() => userMoveHandler(aIndex, bIndex, emptyCell)}
                                 />

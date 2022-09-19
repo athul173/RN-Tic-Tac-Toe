@@ -31,7 +31,7 @@ const WinningsHistory = ({ modalVisible, setModalVisible }: Props) => {
                         }}
                         style={styles.modalView}
                     >
-                        <Text style={{ ...styles.labelText, fontWeight: 'bold' }}>Winnings</Text>
+                        <Text style={styles.winningsLabelText}>Winnings</Text>
                         <View style={styles.winningsView}>
                             <View style={styles.winningLabelsView}>
                                 <Text style={styles.labelText}>CPU: {winningsCounter.CPU}</Text>

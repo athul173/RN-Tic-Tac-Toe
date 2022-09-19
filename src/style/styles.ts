@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from './themes';
 
-export const useStyles = (size?: number) => {
+export const useStyles = (winningCombination?: boolean, size?: number) => {
     const theme = useTheme();
 
     const styles = StyleSheet.create({
@@ -31,15 +31,27 @@ export const useStyles = (size?: number) => {
             width: 345 / 3,
             justifyContent: 'center',
             alignItems: 'center',
+            borderWidth: 1,
+        },
+        winningCell: {
+            justifyContent: 'center',
+            alignItems: 'center',
+            elevation: 5,
             borderWidth: 2,
+            shadowColor: '#000',
+            shadowOffset: { width: 5, height: 5 },
+            shadowOpacity: 0.8,
+            shadowRadius: 5,
+            height: 345 / 3,
+            width: 345 / 3,
         },
         cellOSymbol: {
             fontSize: 80,
-            color: theme.color.blue,
+            color: theme.color.oSymbol,
         },
         cellXSymbol: {
             fontSize: 80,
-            color: theme.color.red,
+            color: theme.color.xSymbol,
         },
         titleText: {
             fontFamily: 'Cormorant-Bold',
@@ -49,7 +61,14 @@ export const useStyles = (size?: number) => {
             color: theme.color.grey,
         },
         labelText: { fontFamily: 'Cormorant-Bold', fontSize: 25, color: 'black' },
-
+        winningsLabelText: {
+            fontFamily: 'Cormorant-Bold',
+            fontSize: 25,
+            color: theme.color.primary,
+            fontWeight: 'bold',
+            textDecorationLine: 'underline',
+            textDecorationStyle: 'double',
+        },
         appButtonContainer: {
             elevation: 8,
             borderRadius: 10,

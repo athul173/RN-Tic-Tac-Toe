@@ -44,8 +44,8 @@ const useSmartAi = () => {
         };
 
         const result = hasWon(board);
-        if (result !== null) {
-            return scores[result];
+        if (result.winner !== null) {
+            return scores[result.winner];
         }
 
         if (isMaximizing) {

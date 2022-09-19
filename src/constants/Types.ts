@@ -6,3 +6,4 @@ export type Winnings = {
     CPU: number;
     User: number;
 };
+export type WinningCombinations = string[];

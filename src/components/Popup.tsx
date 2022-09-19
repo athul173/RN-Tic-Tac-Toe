@@ -1,7 +1,15 @@
 import { View, Text, Modal, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setPause, setResult, setPlayAgain, setUserSymbol, setStop, setDifficulty } from '../store/game';
+import {
+    setPause,
+    setResult,
+    setPlayAgain,
+    setUserSymbol,
+    setStop,
+    setDifficulty,
+    setWinningCombination,
+} from '../store/game';
 import { useStyles } from '../style/styles';
 import { AIDifficulty, GameSymbols } from '../constants/Types';
 import SymbolSelectorButton from './SymbolSelectorButtons';
@@ -32,6 +40,7 @@ const Popup = ({ modalVisible, setModalVisible }: Props) => {
         setModalVisible(false);
         setSecondModal(false);
         dispatch(setPause(false));
+        dispatch(setWinningCombination(['', '', '']));
         dispatch(setResult(''));
         dispatch(setStop(false));
         dispatch(setPlayAgain(true));

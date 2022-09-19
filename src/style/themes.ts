@@ -12,6 +12,9 @@ const defaultTheme = {
         black: palette.black,
         blue: palette.blue,
         red: palette.red,
+        oSymbol: palette.darkBlue,
+        xSymbol: palette.pink,
+        winningColor: palette.yellow,
     },
     spacing: {
         S: 8,
