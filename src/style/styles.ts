@@ -80,7 +80,8 @@ export const useStyles = (size?: number) => {
             flex: 1 / 3,
             backgroundColor: 'white',
             borderRadius: 20,
-            padding: 35,
+            paddingVertical: 35,
+            paddingHorizontal: 50,
             alignItems: 'center',
             shadowColor: '#000',
             shadowOffset: {
@@ -91,9 +92,19 @@ export const useStyles = (size?: number) => {
             shadowRadius: 4,
             elevation: 5,
         },
-        symbolSelectorView: {
+        selectorView: {
             flexDirection: 'row',
             marginVertical: theme.spacing.xxl,
+        },
+        winningsView: {
+            flex: 1,
+            marginVertical: theme.spacing.xxl,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        winningLabelsView: {
+            margin: theme.spacing.L,
+            padding: theme.spacing.S,
         },
         roundedBtnView: {
             justifyContent: 'center',

@@ -16,6 +16,10 @@ const gameSlice = createSlice({
             ['', '', ''],
         ],
         difficulty: 'Easy',
+        winningsCounter: {
+            CPU: 0,
+            User: 0,
+        },
     },
     reducers: {
         setUserTurn(state, action: PayloadAction<boolean>) {
@@ -46,9 +50,26 @@ const gameSlice = createSlice({
         setDifficulty(state, action: PayloadAction<AIDifficulty>) {
             state.difficulty = action.payload;
         },
+        setWinningsCounter(state, action: PayloadAction<string>) {
+            if (action.payload === 'You') {
+                state.winningsCounter.User = state.winningsCounter.User + 1;
+            }
+            if (action.payload === 'CPU') {
+                state.winningsCounter.CPU = state.winningsCounter.CPU + 1;
+            }
+        },
     },
 });
 
-export const { setUserTurn, setPause, setResult, setPlayAgain, setUserSymbol, setBoard, setStop, setDifficulty } =
-    gameSlice.actions;
+export const {
+    setUserTurn,
+    setPause,
+    setResult,
+    setPlayAgain,
+    setUserSymbol,
+    setBoard,
+    setStop,
+    setDifficulty,
+    setWinningsCounter,
+} = gameSlice.actions;
 export default gameSlice.reducer;

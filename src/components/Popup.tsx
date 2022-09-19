@@ -51,7 +51,7 @@ const Popup = ({ modalVisible, setModalVisible }: Props) => {
                 <View style={styles.popUpView}>
                     <View style={styles.modalView}>
                         <Text style={styles.labelText}>{`Select your ${secondModal ? 'difficulty' : 'symbol'} `}</Text>
-                        <View style={styles.symbolSelectorView}>
+                        <View style={styles.selectorView}>
                             {secondModal ? (
                                 <DifficultySelectorButtons
                                     onPressEasy={() => difficultyButtonHandler('Easy')}
