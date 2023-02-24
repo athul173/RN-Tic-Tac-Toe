@@ -6,6 +6,7 @@ const [hasWon] = useWinnerCheck();
 const [deepCopy] = useDeepCopy();
 
 const useSmartAi = () => {
+    console.log('useSmartAi');
     const smartMove = (board: string[][], cpuSymbol: GameSymbols, userSymbol: GameSymbols) => {
         console.log('Getting smart');
         // AI to make its turn

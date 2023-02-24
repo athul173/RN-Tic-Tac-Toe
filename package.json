@@ -3,8 +3,9 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "android": "react-native run-android",
-        "ios": "react-native run-ios --simulator='iPhone 14 Pro Max'",
+        "android": "react-native run-android --active-arch-only",
+        "ios": "react-native run-ios --simulator=\"iPhone SE (3rd generation)\"",
+        "ios-14": "react-native run-ios --simulator=\"iPhone 14 Pro Max\"",
         "start": "react-native start",
         "test": "jest",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -45,6 +46,9 @@
     },
     "jest": {
         "preset": "react-native",
+        "transformIgnorePatterns": [
+            "node_modules/(?!(react-native|my-project|react-native-button)/)"
+        ],
         "moduleFileExtensions": [
             "ts",
             "tsx",
