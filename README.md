@@ -1,5 +1,11 @@
 # React Native Tic Tac Toe Game
 
+A Tic Tac Toe Game built using React Native (v70.01) and the minmax algorithm for smart AI CPU opponent and redux toolkit state management + RN Async Storage. (Started as a challenge assignment)
+
+<img src="https://github.com/athul173/RN-Tic-Tac-Toe/blob/main/screenshots/splash.png" width=50% height=50%>
+<img src="https://github.com/athul173/RN-Tic-Tac-Toe/blob/main/screenshots/game.png" width=50% height=50%>
+<img src="https://github.com/athul173/RN-Tic-Tac-Toe/blob/main/screenshots/symbols.png" width=50% height=50%>
+
 ## Features Included
 
 ###### Features
