@@ -1,4 +1,4 @@
-package com.metamaskchallenge.newarchitecture;
+package com.TicTacToe.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.metamaskchallenge.BuildConfig;
-import com.metamaskchallenge.newarchitecture.components.MainComponentsRegistry;
-import com.metamaskchallenge.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.TicTacToe.BuildConfig;
+import com.TicTacToe.newarchitecture.components.MainComponentsRegistry;
+import com.TicTacToe.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

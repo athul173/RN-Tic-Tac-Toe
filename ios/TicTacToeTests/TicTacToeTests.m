@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface MetaMaskChallengeTests : XCTestCase
+@interface TicTacToeTests : XCTestCase
 
 @end
 
-@implementation MetaMaskChallengeTests
+@implementation TicTacToeTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {
